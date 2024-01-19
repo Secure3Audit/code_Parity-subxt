@@ -3,6 +3,12 @@
 This repo is ONLY used for code sharing, please **submit your findings on the contest page**.
 - https://www.secure3.io/contest/40e11f9e
 
+
+Please read the system design and pre-audit overview:
+- Google Doc: https://docs.google.com/document/d/1lg501LA0Jrst7Fh0L9fuTEoyroCD-7htntW0CmeKV_w/edit?usp=sharing
+- Local PDF copy: [pre-audit_read.pdf](docs/pre-audit_read.pdf)
+
+
 **No Informational** issues will be accepted for this contest!
 - Read our issue severity definition to understand the difference between **Critical, Medium, Low, and Informational**: https://docs.secure3.io/rewards/severity-standard
 - Read our previous audit reports to see some examples of **Critical, Medium, Low, and Informational** issues: https://secure3.io/reports
