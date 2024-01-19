@@ -1,0 +1,45 @@
+[package]
+name = "integration-tests"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+license.workspace = true
+repository.workspace = true
+documentation.workspace = true
+homepage.workspace = true
+description = "Subxt integration tests that rely on the Substrate binary"
+
+[features]
+default = []
+
+# Enable to run the tests with Light Client support.
+unstable-light-client = ["subxt/unstable-light-client"]
+
+# Enable this to use the unstable backend in tests _instead of_
+# the default one which relies on the "old" RPC methods.
+unstable-backend-client = []
+
+[dev-dependencies]
+assert_matches = { workspace = true }
+codec = { package = "parity-scale-codec", workspace = true, features = ["derive", "bit-vec"] }
+frame-metadata = { workspace = true }
+futures = { workspace = true }
+hex = { workspace = true }
+regex = { workspace = true }
+serde = { workspace = true }
+scale-info = { workspace = true, features = ["bit-vec"] }
+sp-core = { workspace = true }
+syn = { workspace = true }
+subxt = { workspace = true, features = ["unstable-metadata", "native", "jsonrpsee", "substrate-compat"] }
+subxt-signer = { workspace = true }
+subxt-codegen = { workspace = true }
+subxt-metadata = { workspace = true }
+test-runtime = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+wabt = { workspace = true }
+substrate-runner = { workspace = true }

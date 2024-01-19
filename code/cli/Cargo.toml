@@ -1,0 +1,44 @@
+[package]
+name = "subxt-cli"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish = true
+
+license.workspace = true
+repository.workspace = true
+documentation = "https://docs.rs/subxt-cli"
+homepage.workspace = true
+description = "Command line utilities for working with subxt codegen"
+
+[[bin]]
+name = "subxt"
+path = "src/main.rs"
+
+[lints]
+workspace = true
+
+[features]
+# Compute the state root hash from the genesis entry.
+# Enable this to create a smaller chain spec file.
+chain-spec-pruning = ["smoldot"]
+
+[dependencies]
+subxt-codegen = { workspace = true, features = ["fetch-metadata"] }
+subxt-metadata = { workspace = true }
+subxt = { workspace = true, features = ["native", "jsonrpsee"] }
+clap = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+color-eyre = { workspace = true }
+serde_json = { workspace = true }
+hex = { workspace = true }
+frame-metadata = { workspace = true }
+codec = { package = "parity-scale-codec", workspace = true }
+scale-info = { workspace = true }
+scale-value = { workspace = true }
+syn = { workspace = true }
+jsonrpsee = { workspace = true, features = ["async-client", "client-ws-transport-native-tls", "http-client"] }
+tokio = { workspace = true, features = ["rt-multi-thread"] }
+thiserror = { workspace = true }
+smoldot = { workspace = true, optional = true}

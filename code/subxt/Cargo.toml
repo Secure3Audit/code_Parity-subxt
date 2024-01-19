@@ -1,0 +1,138 @@
+[package]
+name = "subxt"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish = true
+
+license.workspace = true
+readme = "../README.md"
+repository.workspace = true
+documentation.workspace = true
+homepage.workspace = true
+description = "Submit extrinsics (transactions) to a substrate node via RPC"
+keywords = ["parity", "substrate", "blockchain"]
+
+[lints]
+workspace = true
+
+[features]
+# For dev and documentation reasons we enable more features than are often desired.
+# it's recommended to use `--no-default-features` and then select what you need.
+default = ["jsonrpsee", "native"]
+
+# Enable this for native (ie non web/wasm builds).
+# Exactly 1 of "web" and "native" is expected.
+native = [
+    "jsonrpsee?/async-client",
+    "jsonrpsee?/client-ws-transport-native-tls",
+    "subxt-lightclient?/native",
+    "tokio-util"
+]
+
+# Enable this for web/wasm builds.
+# Exactly 1 of "web" and "native" is expected.
+web = ["jsonrpsee?/async-wasm-client", "jsonrpsee?/client-web-transport", "getrandom/js", "subxt-lightclient?/web", "subxt-macro/web"]
+
+# Enable this to use jsonrpsee (allowing for example `OnlineClient::from_url`).
+jsonrpsee = ["dep:jsonrpsee"]
+
+# Enable this to pull in extra Substrate dependencies which make it possible to
+# use the `sp_core::crypto::Pair` Signer implementation, as well as adding some
+# `From` impls for types like `AccountId32`. Cannot be used with "web".
+substrate-compat = ["sp-core", "sp-runtime"]
+
+# Enable this to fetch and utilize the latest unstable metadata from a node.
+# The unstable metadata is subject to breaking changes and the subxt might
+# fail to decode the metadata properly. Use this to experiment with the
+# latest features exposed by the metadata.
+unstable-metadata = []
+
+# Activate this to expose the Light Client functionality.
+# Note that this feature is experimental and things may break or not work as expected.
+unstable-light-client = ["subxt-lightclient", "tokio-stream"]
+
+[dependencies]
+async-trait = { workspace = true }
+codec = { package = "parity-scale-codec", workspace = true, features = ["derive"] }
+scale-info = { workspace = true }
+scale-value = { workspace = true }
+scale-bits = { workspace = true }
+scale-decode = { workspace = true }
+scale-encode = { workspace = true }
+futures = { workspace = true }
+hex = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true, features = ["raw_value"] }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+frame-metadata = { workspace = true }
+derivative = { workspace = true }
+either = { workspace = true }
+
+# Provides some deserialization, types like U256/H256 and hashing impls like twox/blake256:
+impl-serde = { workspace = true }
+primitive-types = { workspace = true }
+sp-core-hashing = { workspace = true }
+
+# For ss58 encoding AccountId32 to serialize them properly:
+base58 = { workspace = true }
+blake2 = { workspace = true }
+
+# Included if the "jsonrpsee" feature is enabled.
+jsonrpsee = { workspace = true, optional = true, features = ["jsonrpsee-types"] }
+
+# Included if the "substrate-compat" feature is enabled.
+sp-core = { workspace = true, optional = true }
+sp-runtime = { workspace = true, optional = true }
+
+# Other subxt crates we depend on.
+subxt-macro = { workspace = true }
+subxt-metadata = { workspace = true }
+subxt-lightclient = { workspace = true, optional = true, default-features = false }
+
+# Light client support:
+tokio-stream = { workspace = true, optional = true }
+
+# For parsing urls to disallow insecure schemes
+url = { workspace = true }
+
+# Included if "web" feature is enabled, to enable its js feature.
+getrandom = { workspace = true, optional = true }
+
+# Included if "native" feature is enabled
+tokio-util = { workspace = true, features = ["compat"], optional = true }
+
+[dev-dependencies]
+bitvec = { workspace = true }
+codec = { workspace = true, features = ["derive", "bit-vec"] }
+scale-info = { workspace = true, features = ["bit-vec"] }
+tokio = { workspace = true, features = ["macros", "time", "rt-multi-thread"] }
+sp-core = { workspace = true }
+sp-keyring = { workspace = true }
+sp-runtime = { workspace = true }
+assert_matches = { workspace = true }
+subxt-signer = { path = "../signer" }
+# Tracing subscriber is useful for light-client examples to ensure that
+# the `bootNodes` and chain spec are configured correctly. If all is fine, then
+# the light-client wlll emit INFO logs with
+# `GrandPa warp sync finished` and `Finalized block runtime ready.`
+tracing-subscriber = { workspace = true }
+
+[[example]]
+name = "light_client_tx_basic"
+path = "examples/light_client_tx_basic.rs"
+required-features = ["unstable-light-client", "jsonrpsee"]
+
+[[example]]
+name = "light_client_parachains"
+path = "examples/light_client_parachains.rs"
+required-features = ["unstable-light-client", "jsonrpsee", "native"]
+
+[package.metadata.docs.rs]
+features = ["default", "substrate-compat", "unstable-light-client"]
+rustdoc-args = ["--cfg", "docsrs"]
+
+[package.metadata.playground]
+features = ["default", "substrate-compat", "unstable-light-client"]
